@@ -20,7 +20,7 @@ public class AzureOpenAIAudioClient : IAzureOpenAIAudioClient
 {
     private readonly AsyncSingleton<AudioClient> _client;
 
-    private string _deployment;
+    private string? _deployment;
 
     public AzureOpenAIAudioClient(ILogger<AudioClient> logger, IConfiguration configuration, IAzureOpenAIClientUtil azureOpenAiClientUtil)
     {
