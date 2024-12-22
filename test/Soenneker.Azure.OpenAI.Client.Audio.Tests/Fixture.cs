@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Soenneker.Fixtures.Unit;
 using Soenneker.Utils.Test;
+using Soenneker.Azure.OpenAI.Client.Audio.Registrars;
 
 namespace Soenneker.Azure.OpenAI.Client.Audio.Tests;
 
@@ -24,5 +25,7 @@ public class Fixture : UnitFixture
 
         IConfiguration config = TestUtil.BuildConfig();
         services.AddSingleton(config);
+
+        services.AddAzureOpenAIAudioClientAsScoped();
     }
 }
