@@ -33,7 +33,7 @@ public class AzureOpenAIAudioClient : IAzureOpenAIAudioClient
             if (!_deployment.IsNullOrEmpty())
                 deployment = _deployment;
 
-            deployment.ThrowIfNullOrWhitespace();
+            deployment.ThrowIfNullOrWhiteSpace();
 
             logger.LogDebug("Creating Azure OpenAI Audio client with deployment ({deployment})...", deployment);
 
