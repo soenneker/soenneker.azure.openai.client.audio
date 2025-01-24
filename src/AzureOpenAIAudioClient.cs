@@ -37,9 +37,7 @@ public class AzureOpenAIAudioClient : IAzureOpenAIAudioClient
 
             logger.LogDebug("Creating Azure OpenAI Audio client with deployment ({deployment})...", deployment);
 
-            AudioClient? client = azureClient.GetAudioClient(deployment);
-
-            return client;
+            return azureClient.GetAudioClient(deployment);
         });
     }
 
