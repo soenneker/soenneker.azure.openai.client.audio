@@ -1,4 +1,4 @@
-# Contributing to Soenneker.Azure.OpenAI.Client.Audio
+﻿# Contributing to Soenneker.Azure.OpenAI.Client.Audio
 
 We're excited that you're interested in contributing!
 
