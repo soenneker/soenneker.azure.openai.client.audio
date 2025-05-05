@@ -35,13 +35,13 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <None Include="..\CONTRIBUTING.md" Link="CONTRIBUTING.md" />
+        
         <None Include="..\README.md" Pack="true" PackagePath="\" />
         <None Include="..\LICENSE" Pack="true" PackagePath="\" />
         <None Include="..\icon.png" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Soenneker.Azure.OpenAI.Client" Version="3.0.722" />
+        <PackageReference Include="Soenneker.Azure.OpenAI.Client" Version="3.0.727" />
     </ItemGroup>
 </Project>
