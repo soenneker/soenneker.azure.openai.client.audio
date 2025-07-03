@@ -16,7 +16,7 @@ using Soenneker.Utils.AsyncSingleton;
 namespace Soenneker.Azure.OpenAI.Client.Audio;
 
 /// <inheritdoc cref="IAzureOpenAIAudioClient"/>
-public class AzureOpenAIAudioClient : IAzureOpenAIAudioClient
+public sealed class AzureOpenAIAudioClient : IAzureOpenAIAudioClient
 {
     private readonly AsyncSingleton<AudioClient> _client;
 
@@ -53,15 +53,11 @@ public class AzureOpenAIAudioClient : IAzureOpenAIAudioClient
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
-
         _client.Dispose();
     }
 
     public ValueTask DisposeAsync()
     {
-        GC.SuppressFinalize(this);
-
         return _client.DisposeAsync();
     }
 }
