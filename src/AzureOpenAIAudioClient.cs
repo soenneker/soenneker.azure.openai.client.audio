@@ -24,7 +24,7 @@ public sealed class AzureOpenAIAudioClient : IAzureOpenAIAudioClient
 
     public AzureOpenAIAudioClient(ILogger<AudioClient> logger, IConfiguration configuration, IAzureOpenAIClientUtil azureOpenAiClientUtil)
     {
-        _client = new AsyncSingleton<AudioClient>(async (ct, _) =>
+        _client = new AsyncSingleton<AudioClient>(async ct =>
         {
             AzureOpenAIClient azureClient = await azureOpenAiClientUtil.Get(ct).NoSync();
 
