@@ -19,26 +19,34 @@ namespace Soenneker.Azure.OpenAI.Client.Audio;
 public sealed class AzureOpenAIAudioClient : IAzureOpenAIAudioClient
 {
     private readonly AsyncSingleton<AudioClient> _client;
+    private readonly ILogger<AudioClient> _logger;
+    private readonly IConfiguration _configuration;
+    private readonly IAzureOpenAIClientUtil _azureOpenAiClientUtil;
 
     private string? _deployment;
 
     public AzureOpenAIAudioClient(ILogger<AudioClient> logger, IConfiguration configuration, IAzureOpenAIClientUtil azureOpenAiClientUtil)
     {
-        _client = new AsyncSingleton<AudioClient>(async ct =>
-        {
-            AzureOpenAIClient azureClient = await azureOpenAiClientUtil.Get(ct).NoSync();
+        _logger = logger;
+        _configuration = configuration;
+        _azureOpenAiClientUtil = azureOpenAiClientUtil;
+        _client = new AsyncSingleton<AudioClient>(CreateClient);
+    }
 
-            var deployment = configuration.GetValue<string?>("Azure:OpenAI:Audio:Deployment");
+    private async ValueTask<AudioClient> CreateClient(CancellationToken ct)
+    {
+        AzureOpenAIClient azureClient = await _azureOpenAiClientUtil.Get(ct).NoSync();
 
-            if (!_deployment.IsNullOrEmpty())
-                deployment = _deployment;
+        var deployment = _configuration.GetValue<string?>("Azure:OpenAI:Audio:Deployment");
 
-            deployment.ThrowIfNullOrWhiteSpace();
+        if (!_deployment.IsNullOrEmpty())
+            deployment = _deployment;
 
-            logger.LogDebug("Creating Azure OpenAI Audio client with deployment ({deployment})...", deployment);
+        deployment.ThrowIfNullOrWhiteSpace();
 
-            return azureClient.GetAudioClient(deployment);
-        });
+        _logger.LogDebug("Creating Azure OpenAI Audio client with deployment ({deployment})...", deployment);
+
+        return azureClient.GetAudioClient(deployment);
     }
 
     public void SetOptions(string deployment)
