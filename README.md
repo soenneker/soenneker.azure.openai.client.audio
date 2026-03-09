@@ -1,6 +1,7 @@
 [![](https://img.shields.io/nuget/v/soenneker.azure.openai.client.audio.svg?style=for-the-badge)](https://www.nuget.org/packages/soenneker.azure.openai.client.audio/)
 [![](https://img.shields.io/github/actions/workflow/status/soenneker/soenneker.azure.openai.client.audio/publish-package.yml?style=for-the-badge)](https://github.com/soenneker/soenneker.azure.openai.client.audio/actions/workflows/publish-package.yml)
 [![](https://img.shields.io/nuget/dt/soenneker.azure.openai.client.audio.svg?style=for-the-badge)](https://www.nuget.org/packages/soenneker.azure.openai.client.audio/)
+[![](https://img.shields.io/github/actions/workflow/status/soenneker/soenneker.azure.openai.client.audio/codeql.yml?label=CodeQL&style=for-the-badge)](https://github.com/soenneker/soenneker.azure.openai.client.audio/actions/workflows/codeql.yml)
 
 # ![](https://user-images.githubusercontent.com/4441470/224455560-91ed3ee7-f510-4041-a8d2-3fc093025112.png) Soenneker.Azure.OpenAI.Client.Audio
 ### An async thread-safe singleton for the Azure OpenAI audio client
