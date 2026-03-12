@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Soenneker.Azure.OpenAI.Client.Audio.csproj" />
+        <ProjectReference Include="..\..\src\Soenneker.Azure.OpenAI.Client.Audio\Soenneker.Azure.OpenAI.Client.Audio.csproj" />
     </ItemGroup>
 
     <ItemGroup>
