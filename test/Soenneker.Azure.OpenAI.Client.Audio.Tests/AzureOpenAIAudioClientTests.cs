@@ -1,20 +1,19 @@
 using Soenneker.Azure.OpenAI.Client.Audio.Abstract;
-using Soenneker.Tests.FixturedUnit;
-using Xunit;
+using Soenneker.Tests.HostedUnit;
 
 namespace Soenneker.Azure.OpenAI.Client.Audio.Tests;
 
-[Collection("Collection")]
-public class AzureOpenAIAudioClientTests : FixturedUnitTest
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
+public class AzureOpenAIAudioClientTests : HostedUnitTest
 {
     private readonly IAzureOpenAIAudioClient _util;
 
-    public AzureOpenAIAudioClientTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public AzureOpenAIAudioClientTests(Host host) : base(host)
     {
         _util = Resolve<IAzureOpenAIAudioClient>(true);
     }
 
-    [Fact]
+    [Test]
     public void Default()
     {
 
