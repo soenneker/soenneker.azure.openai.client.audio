@@ -16,5 +16,10 @@ public interface IAzureOpenAIAudioClient : IDisposable, IAsyncDisposable
     /// <param name="deployment"></param>
     void SetOptions(string deployment);
 
+    /// <summary>
+    /// Gets the value.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task containing the result of the operation.</returns>
     ValueTask<AudioClient> Get(CancellationToken cancellationToken = default);
 }
