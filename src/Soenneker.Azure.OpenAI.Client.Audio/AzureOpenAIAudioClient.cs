@@ -22,8 +22,10 @@ public sealed class AzureOpenAIAudioClient : IAzureOpenAIAudioClient
     private readonly ILogger<AudioClient> _logger;
     private readonly IConfiguration _configuration;
     private readonly IAzureOpenAIClientUtil _azureOpenAiClientUtil;
+    private readonly object _optionsLock = new();
 
     private string? _deployment;
+    private bool _clientCreated;
 
     public AzureOpenAIAudioClient(ILogger<AudioClient> logger, IConfiguration configuration, IAzureOpenAIClientUtil azureOpenAiClientUtil)
     {
@@ -37,21 +39,34 @@ public sealed class AzureOpenAIAudioClient : IAzureOpenAIAudioClient
     {
         AzureOpenAIClient azureClient = await _azureOpenAiClientUtil.Get(ct).NoSync();
 
-        var deployment = _configuration.GetValue<string?>("Azure:OpenAI:Audio:Deployment");
+        string? deployment = _configuration.GetValue<string?>("Azure:OpenAI:Audio:Deployment");
 
-        if (!_deployment.IsNullOrEmpty())
-            deployment = _deployment;
+        lock (_optionsLock)
+        {
+            if (!_deployment.IsNullOrEmpty())
+                deployment = _deployment;
 
-        deployment.ThrowIfNullOrWhiteSpace();
+            deployment.ThrowIfNullOrWhiteSpace();
 
-        _logger.LogDebug("Creating Azure OpenAI Audio client with deployment ({deployment})...", deployment);
+            _logger.LogDebug("Creating Azure OpenAI Audio client with deployment ({deployment})...", deployment);
 
-        return azureClient.GetAudioClient(deployment);
+            AudioClient client = azureClient.GetAudioClient(deployment);
+            _clientCreated = true;
+            return client;
+        }
     }
 
     public void SetOptions(string deployment)
     {
-        _deployment = deployment;
+        ArgumentException.ThrowIfNullOrWhiteSpace(deployment);
+
+        lock (_optionsLock)
+        {
+            if (_clientCreated)
+                throw new InvalidOperationException("The deployment must be set before the Azure OpenAI audio client is created.");
+
+            _deployment = deployment;
+        }
     }
 
     public ValueTask<AudioClient> Get(CancellationToken cancellationToken = default)

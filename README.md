@@ -5,40 +5,70 @@
 
 # Soenneker.Azure.OpenAI.Client.Audio
 
-An async thread-safe singleton for the Azure OpenAI audio client.
+Creates and caches an OpenAI SDK `AudioClient` for an Azure OpenAI deployment.
 
-## Install
+## Installation
 
 ```bash
 dotnet add package Soenneker.Azure.OpenAI.Client.Audio
 ```
 
-## Quick start
+## Configuration and registration
+
+```json
+{
+  "Azure": {
+    "OpenAI": {
+      "Uri": "https://your-resource.openai.azure.com",
+      "ApiKey": "your-api-key",
+      "Audio": {
+        "Deployment": "audio-deployment-name"
+      }
+    }
+  }
+}
+```
 
 ```csharp
 using Soenneker.Azure.OpenAI.Client.Audio.Registrars;
-using Microsoft.Extensions.DependencyInjection;
 
-var services = new ServiceCollection();
-var result = services.AddAzureOpenAIAudioClientAsSingleton();
+builder.Services.AddAzureOpenAIAudioClientAsSingleton();
 ```
 
-Adds `IAzureOpenAIAudioClient` as a singleton service.
+The registrar includes the shared Azure OpenAI client. Keep the API key in a secret provider.
 
-## What you get
+## Transcribe audio
 
-- `IAzureOpenAIAudioClient` — An async thread-safe singleton for the Azure OpenAI audio client.
-- `AzureOpenAIAudioClientRegistrar` — An async thread-safe singleton for the Azure OpenAI audio client.
+```csharp
+using OpenAI.Audio;
+using Soenneker.Azure.OpenAI.Client.Audio.Abstract;
 
-## API at a glance
+public sealed class TranscriptionService(IAzureOpenAIAudioClient audioClientUtil)
+{
+    public async Task<string> Transcribe(
+        string filePath,
+        CancellationToken cancellationToken)
+    {
+        AudioClient client = await audioClientUtil.Get(cancellationToken);
+        await using FileStream audio = File.OpenRead(filePath);
 
-| API | What it does | Result / important behavior |
-| --- | --- | --- |
-| `AzureOpenAIAudioClientRegistrar.AddAzureOpenAIAudioClientAsSingleton(services)` | Adds `IAzureOpenAIAudioClient` as a singleton service. | The same service collection, so additional registrations can be chained. |
-| `AzureOpenAIAudioClientRegistrar.AddAzureOpenAIAudioClientAsScoped(services)` | Adds `IAzureOpenAIAudioClient` as a scoped service. | The same service collection, so additional registrations can be chained. |
+        AudioTranscription transcription = await client.TranscribeAudioAsync(
+            audio,
+            Path.GetFileName(filePath),
+            options: null,
+            cancellationToken: cancellationToken);
 
-## Practical notes
+        return transcription.Text;
+    }
+}
+```
 
-- Reuse the registered client instead of constructing one per operation.
-- Calls that return a cached or singleton value reuse the same instance until the owning service is disposed.
-- Dispose instances you own when their scope ends so held resources can be released.
+The returned SDK client also exposes speech-generation operations when supported by the configured deployment.
+
+## Deployment and lifecycle
+
+- `Azure:OpenAI:Audio:Deployment` is required unless `SetOptions(deployment)` is called before the first `Get()`.
+- `SetOptions()` overrides configuration for that utility instance.
+- Calling `SetOptions()` after client creation throws; it does not silently change the cached deployment.
+- The audio client and underlying Azure client are cached. Replace the DI scope or singleton to switch deployments or credentials.
+- Audio content may contain sensitive data. Apply appropriate retention, logging, and access controls in the consuming application.

@@ -11,9 +11,11 @@ namespace Soenneker.Azure.OpenAI.Client.Audio.Abstract;
 public interface IAzureOpenAIAudioClient : IDisposable, IAsyncDisposable
 {
     /// <summary>
-    /// Not required, but can be used to set the deployment and options for the client
+    /// Overrides the configured deployment before the client is first created.
     /// </summary>
-    /// <param name="deployment"></param>
+    /// <param name="deployment">Azure OpenAI deployment name.</param>
+    /// <exception cref="ArgumentException"><paramref name="deployment"/> is blank.</exception>
+    /// <exception cref="InvalidOperationException">The audio client has already been created.</exception>
     void SetOptions(string deployment);
 
     /// <summary>
