@@ -17,9 +17,9 @@ public interface IAzureOpenAIAudioClient : IDisposable, IAsyncDisposable
     void SetOptions(string deployment);
 
     /// <summary>
-    /// Gets the value.
+    /// Returns the configured audio Client used by the azure openai audio client.
     /// </summary>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task containing the result of the operation.</returns>
+    /// <param name="cancellationToken">Token used to cancel the operation.</param>
+    /// <returns>A task whose result is the requested audio Client.</returns>
     ValueTask<AudioClient> Get(CancellationToken cancellationToken = default);
 }

@@ -13,6 +13,8 @@ public static class AzureOpenAIAudioClientRegistrar
     /// <summary>
     /// Adds <see cref="IAzureOpenAIAudioClient"/> as a singleton service. <para/>
     /// </summary>
+    /// <param name="services">Service collection that receives the registration.</param>
+    /// <returns>The same service collection, so additional registrations can be chained.</returns>
     public static IServiceCollection AddAzureOpenAIAudioClientAsSingleton(this IServiceCollection services)
     {
         services.AddAzureOpenAIClientUtilAsSingleton();
@@ -24,6 +26,8 @@ public static class AzureOpenAIAudioClientRegistrar
     /// <summary>
     /// Adds <see cref="IAzureOpenAIAudioClient"/> as a scoped service. <para/>
     /// </summary>
+    /// <param name="services">Service collection that receives the registration.</param>
+    /// <returns>The same service collection, so additional registrations can be chained.</returns>
     public static IServiceCollection AddAzureOpenAIAudioClientAsScoped(this IServiceCollection services)
     {
         services.AddAzureOpenAIClientUtilAsScoped();
