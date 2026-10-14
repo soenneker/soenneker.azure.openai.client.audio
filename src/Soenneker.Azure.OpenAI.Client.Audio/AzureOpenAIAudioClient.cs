@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using OpenAI.Audio;
 using Soenneker.Azure.OpenAI.Client.Abstract;
 using Soenneker.Azure.OpenAI.Client.Audio.Abstract;
-using Soenneker.Extensions.String;
 using Soenneker.Extensions.ValueTask;
 using Soenneker.Utils.AsyncSingleton;
 
@@ -43,10 +42,10 @@ public sealed class AzureOpenAIAudioClient : IAzureOpenAIAudioClient
 
         lock (_optionsLock)
         {
-            if (!_deployment.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(_deployment))
                 deployment = _deployment;
 
-            deployment.ThrowIfNullOrWhiteSpace();
+            ArgumentException.ThrowIfNullOrWhiteSpace(deployment);
 
             _logger.LogDebug("Creating Azure OpenAI Audio client with deployment ({deployment})...", deployment);
 
