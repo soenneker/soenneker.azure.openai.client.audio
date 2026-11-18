@@ -47,7 +47,8 @@ public sealed class AzureOpenAIAudioClient : IAzureOpenAIAudioClient
 
             ArgumentException.ThrowIfNullOrWhiteSpace(deployment);
 
-            _logger.LogDebug("Creating Azure OpenAI Audio client with deployment ({deployment})...", deployment);
+            if (_logger.IsEnabled(LogLevel.Debug))
+                _logger.LogDebug("Creating Azure OpenAI Audio client with deployment ({deployment})...", deployment);
 
             AudioClient client = azureClient.GetAudioClient(deployment);
             _clientCreated = true;
